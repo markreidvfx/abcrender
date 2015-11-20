@@ -40,3 +40,5 @@ target_link_libraries(abcrender
 ${ImageMagick_LIBRARIES}
 ${SCENE_LIBRARIES}
 )
+
+install(TARGETS abcrender DESTINATION bin)
