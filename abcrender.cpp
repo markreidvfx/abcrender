@@ -1,6 +1,7 @@
 #include "abcrender.h"
 #include <stdio.h>
 #include <Magick++.h>
+#include <future>
 
 static void accumXform( M44d &xf, const IObject obj, chrono_t seconds )
 {
@@ -328,6 +329,18 @@ int format_string(const std::string &s, std::string &result, int frame)
     return cx;
 }
 
+static int read_imageplane(Magick::Image *image, const std::string path, int frame)
+{
+
+    std::string formated_path;
+    format_string(path, formated_path, frame);
+    image->read(formated_path);
+    image->strip();
+    image->attribute("colorspace", "srgb");
+
+    return 0;
+}
+
 int abcrender(const std::string &abc_path,
               const std::string &dest_path,
               const std::string &image_path,
@@ -351,8 +364,7 @@ int abcrender(const std::string &abc_path,
     int height = 1080;
     RenderContext ctx(width, height);
     RenderContext texture(0, 0);
-    //std::string texture_path = "/Users/mark/Dev/SimpleRaster-build/checker.png";
-    //texture_path = "/Users/mark/Projects/Samples/RU_029_001/projection_template_guide.tif";
+
     if (!texture_path.empty()) {
         Magick::Image texture_image(texture_path);
         float tex_width = texture_image.size().width();
@@ -365,35 +377,32 @@ int abcrender(const std::string &abc_path,
 
     std::chrono::time_point<std::chrono::system_clock> start;
     std::chrono::duration<double> elapsed_seconds;
-    //std::string bg_formating_string = "/Users/mark/Projects/Samples/RU_029_001/RU_029_001/RU_029_001.%04d.dpx";
+    std::future<int> future;
 
     for (int i= start_frame; i < end_frame + 1; i++) {
-        start = std::chrono::system_clock::now();
+        Magick::Image rendered_image;
+        Magick::Image image;
         std::string out_image_path;
 
-        //std::cerr << out_image_path << std::endl;
+        start = std::chrono::system_clock::now();
+        if (!image_path.empty()) {
+            future = std::async(std::launch::async, read_imageplane, &image, image_path, i);
+            //read_imageplane(&image, image_path, i);
+        }
 
+        //render abc
         renderer.render(ctx, i);
 
         elapsed_seconds = std::chrono::system_clock::now() - start;
-        std::cerr << "frame " << i << " render in " << elapsed_seconds.count() << " secs \n";
+        std::cerr << "  abc rendered in " << elapsed_seconds.count() << " secs \n";
 
-        start = std::chrono::system_clock::now();
+        //start = std::chrono::system_clock::now();
 
-        Magick::Image rendered_image;
-        Magick::Image image;
-
-        //rendered_image.verbose(true);
-        //image.verbose(true);
         rendered_image.read(width, height, "RGBA", Magick::FloatPixel, &ctx.data[0]);
-        //rendered_image.resize("50%");
         rendered_image.flip();
 
-        std::string bg_path;
-        if (!(image_path.empty()) && !(format_string(image_path, bg_path, i) < 0)) {
-            image.read(bg_path);
-            image.strip();
-            image.attribute("colorspace", "srgb");
+        if (future.valid()) {
+            future.get();
             image.composite(rendered_image, Magick::CenterGravity, Magick::OverCompositeOp);
         } else {
             image = rendered_image;
@@ -404,8 +413,8 @@ int abcrender(const std::string &abc_path,
         image.depth(8);
         image.write(out_image_path);
 
-        elapsed_seconds = std::chrono::system_clock::now()-start;
-        std::cerr << "image " << i << " written in " << elapsed_seconds.count() << " secs \n";
+        elapsed_seconds = std::chrono::system_clock::now() - start;
+        std::cerr << "image " << i << " completed in " << elapsed_seconds.count() << " secs \n";
 
         //break;
         ctx.clear();

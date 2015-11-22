@@ -36,6 +36,9 @@ gradient.cpp
 abcrender.cpp
 )
 
+set_property(TARGET abcrender PROPERTY CXX_STANDARD 11)
+set_property(TARGET abcrender PROPERTY CXX_STANDARD_REQUIRED ON)
+
 target_link_libraries(abcrender
 ${ImageMagick_LIBRARIES}
 ${SCENE_LIBRARIES}
