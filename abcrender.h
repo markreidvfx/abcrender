@@ -25,7 +25,9 @@ int abcrender(const std::string &abc_path,
               const std::string &image_path,
               const std::string &texture_path,
               int start_frame,
-              int end_frame);
+              int end_frame,
+              int width=1920,
+              int height=1080);
 
 class ABCRender
 {

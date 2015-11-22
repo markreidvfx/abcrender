@@ -329,7 +329,11 @@ int format_string(const std::string &s, std::string &result, int frame)
     return cx;
 }
 
-static int read_imageplane(Magick::Image *image, const std::string path, int frame)
+static int read_imageplane(Magick::Image *image,
+                           const std::string path,
+                           int frame,
+                           int width,
+                           int height)
 {
 
     std::string formated_path;
@@ -337,7 +341,9 @@ static int read_imageplane(Magick::Image *image, const std::string path, int fra
     image->read(formated_path);
     image->strip();
     image->attribute("colorspace", "srgb");
-
+    Magick::Geometry size(width, height);
+    size.aspect(true);
+    image->resize(size);
     return 0;
 }
 
@@ -346,7 +352,9 @@ int abcrender(const std::string &abc_path,
               const std::string &image_path,
               const std::string &texture_path,
               int start_frame,
-              int end_frame)
+              int end_frame,
+              int width,
+              int height)
 {
     ABCRender renderer(abc_path);
 
@@ -360,8 +368,6 @@ int abcrender(const std::string &abc_path,
         return -1;
     }
 
-    int width = 1920;
-    int height = 1080;
     RenderContext ctx(width, height);
     RenderContext texture(0, 0);
 
@@ -386,7 +392,8 @@ int abcrender(const std::string &abc_path,
 
         start = std::chrono::system_clock::now();
         if (!image_path.empty()) {
-            future = std::async(std::launch::async, read_imageplane, &image, image_path, i);
+            future = std::async(std::launch::async, read_imageplane,
+                                &image, image_path, i, width, height);
             //read_imageplane(&image, image_path, i);
         }
 

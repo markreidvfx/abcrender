@@ -6,7 +6,9 @@
 #include <string>
 #include <chrono>
 #include <stdlib.h>
+
 #include <Alembic/Abc/All.h>
+#include <Magick++.h>
 
 using namespace std;
 
@@ -17,7 +19,8 @@ void usage_message(const char argv0[])
     cerr << "       -i --imageplane      background image.%04d.jpg." << endl;
     cerr << "       -s --start           start frame." << endl;
     cerr << "       -e --end             end frame." << endl;
-    cerr << "       -h --hel             display this usage information." << endl;
+    cerr << "          --size            rendered image size [default: \"1920x1080\"]" << endl;
+    cerr << "       -h --help            display this usage information." << endl;
 }
 
 std::string basename(std::string const & path)
@@ -92,6 +95,7 @@ int main(int argc, char* argv[])
     std::string imageplane_arg = "";
     std::string start_arg = "";
     std::string end_arg = "";
+    std::string size_arg = "";
 
     for (int i = 1; i < argc; ++i) {
         string a(argv[i]);
@@ -108,6 +112,9 @@ int main(int argc, char* argv[])
                 i++;
             } else if ( (a == "-e" || a == "--end") && i+1 < argc) {
                 end_arg = argv[i+1];
+                i++;
+            } else if ( (a == "--size") && i+1 < argc) {
+                size_arg =  argv[i+1];
                 i++;
             } else if (a == "-h" || a == "--help") {
                 usage_message(argv[0]);
@@ -156,6 +163,12 @@ int main(int argc, char* argv[])
         return -1;
     }
 
+    Magick::Geometry size(1920, 1080);
+
+    if (!size_arg.empty()) {
+        size = size_arg;
+    }
+
     if (args.size() > 1)
         dest = args[1];
     else
@@ -166,6 +179,7 @@ int main(int argc, char* argv[])
     return abcrender(abc_path, dest,
                      imageplane_arg,
                      texture_arg,
-                     start_frame, end_frame);
+                     start_frame, end_frame,
+                     size.width(), size.height());
 }
 
