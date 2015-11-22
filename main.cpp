@@ -17,7 +17,7 @@ void usage_message(const char argv0[])
     cerr << "       -i --imageplane      background image.%04d.jpg." << endl;
     cerr << "       -s --start           start frame." << endl;
     cerr << "       -e --end             end frame." << endl;
-    cerr << "       -h                   display this usage information." << endl;
+    cerr << "       -h --hel             display this usage information." << endl;
 }
 
 std::string basename(std::string const & path)
@@ -100,15 +100,18 @@ int main(int argc, char* argv[])
             if ( (a == "-t" || a == "--texture") && i+1 < argc) {
                 texture_arg = argv[i+1];
                 i++;
-            } else if ( (a == "-i" || a == "--imageplane") && i+1 < argc){
+            } else if ( (a == "-i" || a == "--imageplane") && i+1 < argc) {
                 imageplane_arg = argv[i+1];
                 i++;
-            } else if ( (a == "-s" || a == "--start") && i+1 < argc){
+            } else if ( (a == "-s" || a == "--start") && i+1 < argc) {
                 start_arg = argv[i+1];
                 i++;
-            } else if ( (a == "-e" || a == "--end") && i+1 < argc){
+            } else if ( (a == "-e" || a == "--end") && i+1 < argc) {
                 end_arg = argv[i+1];
                 i++;
+            } else if (a == "-h" || a == "--help") {
+                usage_message(argv[0]);
+                return 0;
             } else {
                 usage_message(argv[0]);
                 std::cerr << "invalid option \""<< a << "\"" << std::endl;
@@ -126,7 +129,10 @@ int main(int argc, char* argv[])
 
     std::string abc_path = args[0];
     std::string dest;
+    int start_frame;
+    int end_frame;
 
+    {
     AbcF::IFactory factory;
     factory.setPolicy(Abc::ErrorHandler::kQuietNoopPolicy);
     AbcF::IFactory::CoreType coreType;
@@ -136,8 +142,9 @@ int main(int argc, char* argv[])
     double f,l;
     Abc::GetArchiveStartAndEndTime(archive, f,l);
 
-    int start_frame = (int)(f*fps + 0.5);
-    int end_frame = (int)(l*fps + 0.5);
+    start_frame = (int)(f*fps + 0.5);
+    end_frame = (int)(l*fps + 0.5);
+    }
 
     if (!parse_int(start_arg, start_frame)) {
         std::cerr << "error parsing start frame: \"" << start_arg << "\"" << std::endl;
