@@ -225,8 +225,10 @@ void RenderContext::draw_scanline(const Gradient &grad,
                       (grad.depth[1] * bary.y) +
                       (grad.depth[2] * bary.z);
 
-        if (depth > get_depth(x, y))
+        if (depth > get_depth(x, y)) {
+            bary += bary_step;
             continue;
+        }
 
         float one_over_z = (grad.one_over_z[0] * bary.x) +
                            (grad.one_over_z[1] * bary.y) +
