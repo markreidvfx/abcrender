@@ -3,6 +3,8 @@ cmake_minimum_required(VERSION 2.8)
 set(CMAKE_BUILD_TYPE Debug)
 find_package(ImageMagick COMPONENTS Magick++ MagickCore REQUIRED)
 
+find_package(Boost REQUIRED)
+
 find_path(GLM_INCLUDE_DIR glm/glm.hpp)
 message(STATUS "glm ${GLM_INCLUDE_DIR}")
 
@@ -17,6 +19,7 @@ ${GLM_INCLUDE_DIR}
 ${ImageMagick_INCLUDE_DIRS}
 ${ALEMBIC_INCLUDE_DIR}
 ${EXR_INCLUDE_DIR}/OpenEXR
+${Boost_INCLUDE_DIRS}
 )
 
 set(SCENE_LIBRARIES "")
