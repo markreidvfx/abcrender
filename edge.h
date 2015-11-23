@@ -16,7 +16,7 @@ public:
     int ystart() const {return m_ystart;}
     int yend() const {return m_yend;}
     float x() const {return m_x;}
-    glm::vec4 color() const {return m_color;}
+    glm::vec3 color() const {return m_color;}
     float one_overz() const {return m_one_overz;}
     glm::vec2 uv() const {return m_uv;}
 private:
@@ -25,8 +25,8 @@ private:
     int m_ystart;
     int m_yend;
 
-    glm::vec4 m_color;
-    glm::vec4 m_colorstep;
+    glm::vec3 m_color;
+    glm::vec3 m_colorstep;
 
     float m_one_overz;
     float m_one_overz_step;

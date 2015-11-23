@@ -217,8 +217,8 @@ void RenderContext::draw_scanline(const Gradient &grad,
 
     float xprestep = (float)xmin - (float)left.x();
 
-    glm::vec4 bary_step = grad.colorstep_x();
-    glm::vec4 bary = left.color() + (grad.colorstep_x() * xprestep);
+    glm::vec3 bary_step = grad.colorstep_x();
+    glm::vec3 bary = left.color() + (grad.colorstep_x() * xprestep);
 
     for(int x = xmin; x < xmax; x++) {
         float depth = (grad.depth[0] * bary.x) +

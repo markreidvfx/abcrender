@@ -20,9 +20,9 @@ Gradient::Gradient(const Vertex &min_y,
 
     float inv_dy = -inv_dx;
 
-    m_colors[0] = glm::vec4(1,0,0,1);
-    m_colors[1] = glm::vec4(0,1,0,1);
-    m_colors[2] = glm::vec4(0,0,1,1);
+    m_colors[0] = glm::vec3(1,0,0);
+    m_colors[1] = glm::vec3(0,1,0);
+    m_colors[2] = glm::vec3(0,0,1);
 
     uv[0] = min_y.uv * one_over_z[0];
     uv[1] = mid_y.uv * one_over_z[1];
@@ -32,7 +32,7 @@ Gradient::Gradient(const Vertex &min_y,
     vtx[1] = mid_y;
     vtx[2] = max_y;
 
-    for (int i =0; i < 4; i++) {
+    for (int i =0; i < 3; i++) {
         glm::vec3 values(m_colors[0][i],
                          m_colors[1][i],
                          m_colors[2][i]);

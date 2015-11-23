@@ -11,9 +11,9 @@ public:
              const Vertex &mid_y,
              const Vertex &max_y);
 
-    glm::vec4 color(int index) const { return m_colors[index];}
-    glm::vec4 colorstep_x() const { return m_colorstep_x; }
-    glm::vec4 colorstep_y() const { return m_colorstep_y; }
+    glm::vec3 color(int index) const { return m_colors[index];}
+    glm::vec3 colorstep_x() const { return m_colorstep_x; }
+    glm::vec3 colorstep_y() const { return m_colorstep_y; }
 
     Vertex vtx[3];
     glm::vec2 uv[3];
@@ -22,9 +22,9 @@ public:
     float one_over_z[3];
 
 private:
-    glm::vec4 m_colorstep_x;
-    glm::vec4 m_colorstep_y;
-    glm::vec4 m_colors[3];
+    glm::vec3 m_colorstep_x;
+    glm::vec3 m_colorstep_y;
+    glm::vec3 m_colors[3];
 
 
 
