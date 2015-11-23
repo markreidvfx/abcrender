@@ -223,17 +223,18 @@ void RenderContext::draw_scanline(const Gradient &grad,
     glm::vec4 bary = left.color() + (grad.colorstep_x() * xprestep);
 
     for(int x = xmin; x < xmax; x += step) {
+        float depth = (grad.depth[0] * bary.x) +
+                      (grad.depth[1] * bary.y) +
+                      (grad.depth[2] * bary.z);
+
+        if (depth > get_depth(x, y))
+            continue;
 
         float one_over_z = (grad.one_over_z[0] * bary.x) +
                            (grad.one_over_z[1] * bary.y) +
                            (grad.one_over_z[2] * bary.z);
 
         float z = 1.0f/one_over_z;
-
-
-        float depth = (grad.depth[0] * bary.x) +
-                      (grad.depth[1] * bary.y) +
-                      (grad.depth[2] * bary.z);
 
         glm::vec3 normal = (grad.vtx[0].normal * bary.x) +
                            (grad.vtx[1].normal * bary.y) +
@@ -257,10 +258,9 @@ void RenderContext::draw_scanline(const Gradient &grad,
         }
         */
 
-        if (depth < get_depth(x, y)) {
-            draw_pixel(x, y, c);
-            draw_depth(x, y, depth);
-        }
+        draw_pixel(x, y, c);
+        draw_depth(x, y, depth);
+
 
         bary += bary_step * step;
     }
