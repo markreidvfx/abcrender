@@ -15,9 +15,10 @@ public:
     glm::vec3 barystep_x() const { return m_barystep_x; }
     glm::vec3 barystep_y() const { return m_barystep_y; }
 
-    glm::vec2 uv[3];
     float depth[3];
     float one_over_z[3];
+    glm::vec2 uv[3];
+    glm::vec3 normal[3];
 
 private:
     glm::vec3 m_barystep_x;

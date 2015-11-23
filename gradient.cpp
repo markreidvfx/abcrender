@@ -27,6 +27,10 @@ Gradient::Gradient(const Vertex &min_y,
     uv[1] = mid_y.uv * one_over_z[1];
     uv[2] = max_y.uv * one_over_z[2];
 
+    normal[0] = min_y.normal;
+    normal[1] = mid_y.normal;
+    normal[2] = max_y.normal;
+
     for (int i =0; i < 3; i++) {
         glm::vec3 values(m_bary[0][i],
                          m_bary[1][i],
