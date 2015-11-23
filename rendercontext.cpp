@@ -234,6 +234,12 @@ void RenderContext::draw_scanline(const Gradient &grad,
 
         float z = 1.0f/one_over_z;
 
+        glm::vec2 uv = (grad.uv[0] * bary.x) +
+                       (grad.uv[1] * bary.y) +
+                       (grad.uv[2] * bary.z);
+
+        uv *= z;
+
         /*
         glm::vec3 normal = (grad.vtx[0].normal * bary.x) +
                            (grad.vtx[1].normal * bary.y) +
@@ -242,11 +248,7 @@ void RenderContext::draw_scanline(const Gradient &grad,
         glm::vec3 light_dir(0,0,1);
         float light_amt = glm::length(glm::dot(normal, light_dir)) * 0.9f + 0.1f;
         */
-        glm::vec2 uv = (grad.uv[0] * bary.x) +
-                       (grad.uv[1] * bary.y) +
-                       (grad.uv[2] * bary.z);
 
-        uv *= z;
         glm::vec4 c(1,1,1,1);
         if (texture)
             c = texture->get_pixel_linear(uv.x * ((float)texture->width()-1),

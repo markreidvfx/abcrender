@@ -4,15 +4,6 @@ Gradient::Gradient(const Vertex &min_y,
                    const Vertex &mid_y,
                    const Vertex &max_y)
 {
-
-    one_over_z[0] = 1.0f / min_y.pos.w;
-    one_over_z[1] = 1.0f / mid_y.pos.w;
-    one_over_z[2] = 1.0f / max_y.pos.w;
-
-    depth[0] = min_y.pos.z;
-    depth[1] = mid_y.pos.z;
-    depth[2] = max_y.pos.z;
-
     float inv_dx = 1.0f / (
               ((mid_y.pos.x - max_y.pos.x) * (min_y.pos.y - max_y.pos.y)) -
               ((min_y.pos.x - max_y.pos.x) * (mid_y.pos.y - max_y.pos.y))
@@ -24,13 +15,17 @@ Gradient::Gradient(const Vertex &min_y,
     m_colors[1] = glm::vec3(0,1,0);
     m_colors[2] = glm::vec3(0,0,1);
 
+    depth[0] = min_y.pos.z;
+    depth[1] = mid_y.pos.z;
+    depth[2] = max_y.pos.z;
+
+    one_over_z[0] = 1.0f / min_y.pos.w;
+    one_over_z[1] = 1.0f / mid_y.pos.w;
+    one_over_z[2] = 1.0f / max_y.pos.w;
+
     uv[0] = min_y.uv * one_over_z[0];
     uv[1] = mid_y.uv * one_over_z[1];
     uv[2] = max_y.uv * one_over_z[2];
-
-    vtx[0] = min_y;
-    vtx[1] = mid_y;
-    vtx[2] = max_y;
 
     for (int i =0; i < 3; i++) {
         glm::vec3 values(m_colors[0][i],
