@@ -31,9 +31,9 @@ Edge::Edge(const Gradient &grad,
 
 }
 
-void Edge::step(float step_size)
+void Edge::step()
 {
-    m_x += m_xstep * step_size;
-    m_color += m_colorstep * step_size;
+    m_x += m_xstep;
+    m_color += m_colorstep;
 }
 

@@ -200,11 +200,10 @@ void RenderContext::scan_edge(const Gradient &grad,
     int ystart = b.ystart();
     int yend = b.yend();
 
-    float step = 1;
-    for (int y = ystart; y < yend; y += step) {
+    for (int y = ystart; y < yend; y++) {
         draw_scanline(grad, *left, *right, y);
-        left->step(step);
-        right->step(step);
+        left->step();
+        right->step();
     }
 }
 
@@ -213,7 +212,6 @@ void RenderContext::draw_scanline(const Gradient &grad,
                                   const Edge &right,
                                   float y)
 {
-    float step = 1;
     int xmin = (int)ceil(left.x());
     int xmax = (int)ceil(right.x());
 
@@ -222,7 +220,7 @@ void RenderContext::draw_scanline(const Gradient &grad,
     glm::vec4 bary_step = grad.colorstep_x();
     glm::vec4 bary = left.color() + (grad.colorstep_x() * xprestep);
 
-    for(int x = xmin; x < xmax; x += step) {
+    for(int x = xmin; x < xmax; x++) {
         float depth = (grad.depth[0] * bary.x) +
                       (grad.depth[1] * bary.y) +
                       (grad.depth[2] * bary.z);
@@ -236,13 +234,14 @@ void RenderContext::draw_scanline(const Gradient &grad,
 
         float z = 1.0f/one_over_z;
 
+        /*
         glm::vec3 normal = (grad.vtx[0].normal * bary.x) +
                            (grad.vtx[1].normal * bary.y) +
                            (grad.vtx[2].normal * bary.z);
 
         glm::vec3 light_dir(0,0,1);
         float light_amt = glm::length(glm::dot(normal, light_dir)) * 0.9f + 0.1f;
-
+        */
         glm::vec2 uv = (grad.uv[0] * bary.x) +
                        (grad.uv[1] * bary.y) +
                        (grad.uv[2] * bary.z);
@@ -262,6 +261,6 @@ void RenderContext::draw_scanline(const Gradient &grad,
         draw_depth(x, y, depth);
 
 
-        bary += bary_step * step;
+        bary += bary_step;
     }
 }

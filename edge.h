@@ -12,7 +12,7 @@ public:
          const Vertex &min_y,
          const Vertex &max_y,
          int index);
-    void step(float step_size= 1.0);
+    void step();
     int ystart() const {return m_ystart;}
     int yend() const {return m_yend;}
     float x() const {return m_x;}
