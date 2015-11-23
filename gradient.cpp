@@ -11,9 +11,9 @@ Gradient::Gradient(const Vertex &min_y,
 
     float inv_dy = -inv_dx;
 
-    m_colors[0] = glm::vec3(1,0,0);
-    m_colors[1] = glm::vec3(0,1,0);
-    m_colors[2] = glm::vec3(0,0,1);
+    m_bary[0] = glm::vec3(1,0,0);
+    m_bary[1] = glm::vec3(0,1,0);
+    m_bary[2] = glm::vec3(0,0,1);
 
     depth[0] = min_y.pos.z;
     depth[1] = mid_y.pos.z;
@@ -28,12 +28,12 @@ Gradient::Gradient(const Vertex &min_y,
     uv[2] = max_y.uv * one_over_z[2];
 
     for (int i =0; i < 3; i++) {
-        glm::vec3 values(m_colors[0][i],
-                         m_colors[1][i],
-                         m_colors[2][i]);
+        glm::vec3 values(m_bary[0][i],
+                         m_bary[1][i],
+                         m_bary[2][i]);
 
-        m_colorstep_x[i] = calc_xstep(values, min_y, mid_y, max_y, inv_dx);
-        m_colorstep_y[i] = calc_ystep(values, min_y, mid_y, max_y, inv_dy);
+        m_barystep_x[i] = calc_xstep(values, min_y, mid_y, max_y, inv_dx);
+        m_barystep_y[i] = calc_ystep(values, min_y, mid_y, max_y, inv_dy);
     }
 
 }

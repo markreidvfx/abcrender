@@ -21,19 +21,19 @@ Edge::Edge(const Gradient &grad,
 
     float xprestep = m_x - min_y.pos.x;
 
-    m_color = grad.color(index) +
-              (grad.colorstep_x() * xprestep) +
-              (grad.colorstep_y() * yprestep);
+    m_bary = grad.bary(index) +
+             (grad.barystep_x() * xprestep) +
+             (grad.barystep_y() * yprestep);
 
 
-    m_colorstep = grad.colorstep_y() +
-                  (grad.colorstep_x() * m_xstep);
+    m_barystep = grad.barystep_y() +
+                 (grad.barystep_x() * m_xstep);
 
 }
 
 void Edge::step()
 {
     m_x += m_xstep;
-    m_color += m_colorstep;
+    m_bary += m_barystep;
 }
 

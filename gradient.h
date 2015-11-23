@@ -11,18 +11,18 @@ public:
              const Vertex &mid_y,
              const Vertex &max_y);
 
-    glm::vec3 color(int index) const { return m_colors[index];}
-    glm::vec3 colorstep_x() const { return m_colorstep_x; }
-    glm::vec3 colorstep_y() const { return m_colorstep_y; }
+    glm::vec3 bary(int index) const { return m_bary[index];}
+    glm::vec3 barystep_x() const { return m_barystep_x; }
+    glm::vec3 barystep_y() const { return m_barystep_y; }
 
     glm::vec2 uv[3];
     float depth[3];
     float one_over_z[3];
 
 private:
-    glm::vec3 m_colorstep_x;
-    glm::vec3 m_colorstep_y;
-    glm::vec3 m_colors[3];
+    glm::vec3 m_barystep_x;
+    glm::vec3 m_barystep_y;
+    glm::vec3 m_bary[3];
 
     float calc_xstep(const glm::vec3 &values,
                      const Vertex& min,

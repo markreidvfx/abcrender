@@ -16,7 +16,7 @@ public:
     int ystart() const {return m_ystart;}
     int yend() const {return m_yend;}
     float x() const {return m_x;}
-    glm::vec3 color() const {return m_color;}
+    glm::vec3 bary() const {return m_bary;}
 
 private:
     float m_x;
@@ -24,8 +24,8 @@ private:
     int m_ystart;
     int m_yend;
 
-    glm::vec3 m_color;
-    glm::vec3 m_colorstep;
+    glm::vec3 m_bary;
+    glm::vec3 m_barystep;
 
 };
 
